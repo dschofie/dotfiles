@@ -1,0 +1,93 @@
+[branch "master"]
+	rebase = true
+[merge "ours"]
+	driver = true
+[user]
+	email = "dannyschofield28@gmail.com"
+	name = "Danny Schofield"
+
+[alias]
+	# one-line log
+	l = log --pretty=format:"%C(yellow)%h\\ %ad%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate --date=short
+	rrebase = "!rrebase () { b=$1; git fetch origin; git rebase origin/$b; }; rrebase"
+	oneline = log --oneline
+
+	unstage = reset HEAD
+	softone = reset --soft HEAD^
+
+	ad = add
+	addd = add
+	a = add
+	ap = add -p
+	c = commit --verbose
+	ca = commit -a --verbose
+	com = commit -m
+	cam = commit -a -m
+	m = commit --amend --verbose
+
+	d = diff
+	ds = diff --stat
+	dc = diff --cached
+
+	st = status -s
+	s = status
+	co = checkout
+	cob = checkout -b
+
+	# list branches sorted by last modified
+	br = branch
+	b = "!git for-each-ref --sort='-authordate' --format='%(authordate)%09%(objectname:short)%09%(refname)' refs/heads | sed -e 's-refs/heads/--'"
+	bref = "!git for-each-ref --sort='-authordate' --format='%09%(refname)' refs/heads | sed -e 's-refs/heads/--'"
+	rbom = pull --rebase origin master
+	rbiom = rebase -i origin/master 
+	pom = pull origin master
+	resethead = reset --soft HEAD^
+	resethead = reset --soft HEAD^
+	resetcom = "!f(){ git reset --soft HEAD^ && git add -A && git commit --reuse-message=HEAD@{1};};f"
+
+	# list aliases
+	la = "!git config -l | grep alias | cut -c 7-"
+
+	comad = "!f(){ git co master && git add -A && git commit --reuse-message=HEAD@{1};};f"
+	lognum = "!f(){ git log  --pretty=oneline | tail -n $1;};f"
+	pf = push -f
+	whatadded = log --diff-filter=A
+
+[color]
+	ui = true
+
+[color "branch"]
+	current = yellow reverse
+	local = yellow
+	remote = green
+
+[color "diff"]
+	meta = 11
+	frag = magenta bold
+	old = red bold
+	new = green bold
+	commit = yellow bold
+	whitespace = red reverse
+
+[color "status"]
+	added = yellow
+	changed = green
+	untracked = cyan
+
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
+
+[url "ssh://git@github.com/"]
+	insteadOf = https://github.com/
+
+[core]
+	pager = diff-so-fancy | less --tabs=4 -RFX
+
+[color "diff-highlight"]
+	oldNormal = red bold
+	oldHighlight = red bold 52
+	newNormal = green bold
+	newHighlight = green bold 22

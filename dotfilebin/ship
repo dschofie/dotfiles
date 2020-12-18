@@ -1,0 +1,119 @@
+#!/bin/bash
+CURRENT=$(git symbolic-ref -q HEAD || git rev-parse HEAD)
+CURRENT=${CURRENT#refs/heads/}
+gitdir=$(git rev-parse --git-dir)
+# default settings
+verbose=true
+forceopt=
+printUsage() {
+  echo "usage: $0 [options] [remote]"
+  echo
+  echo "  -h  --help                  Show this message"
+  echo "  -v  --verbose               Show all commands before running them (default: on)"
+  echo "  -q  --quiet                 Don't display commands before running them (default: off)"
+  echo "  -f  --force                 Force push the current branch (default: off)"
+  echo
+  echo "  remote                      Which remote we should push to (default: tracking remote or origin)"
+  echo
+}
+for arg in "$@"; do
+  case $arg
+  in
+    -v | --verbose)
+      verbose=true
+      ;;
+    -q | --quiet)
+      verbose=false
+      ;;
+    -f | --force)
+      forceopt="-f"
+      ;;
+    -h | --help)
+      printUsage
+      exit
+      ;;
+    -*)
+      echo "$0: unrecognized parameter '$arg'"
+      printUsage
+      exit 1
+      ;;
+    *)
+      REMOTE=$arg
+  esac
+done
+# colors
+RED="\033[0;31m"
+YELLOW="\033[1;33m"
+GREEN="\033[0;32m"
+NO_COLOR="\033[0m"
+die() {
+  echo -e "${RED}${@}${NO_COLOR}"
+  exit 1
+}
+warn() {
+  echo -e "${YELLOW}${@}${NO_COLOR}"
+}
+good() {
+  echo -e "${GREEN}${@}${NO_COLOR}"
+}
+#git stuff
+GIT=`which git`
+git() {
+  if [ "$verbose" = true ]; then
+    echo -e "+ ${GREEN}git $@${NO_COLOR}"
+  fi
+  eval "$GIT $@"
+}
+if [ -z "$REMOTE" ]; then
+  REMOTE=`$GIT config branch.$CURRENT.remote`
+fi
+if [ -z "$REMOTE" ]; then
+  REMOTE=origin
+fi
+TRACK=`$GIT config branch.$CURRENT.merge`
+if [ -z "$TRACK" ]; then
+  $GIT config branch.$CURRENT.remote "$REMOTE"
+  $GIT config branch.$CURRENT.merge "refs/heads/$CURRENT"
+  TRACK_BRANCH="$CURRENT"
+else
+  TRACK_BRANCH=${TRACK#refs/heads/}
+fi
+if [[ -z "$TRACK" && "$CURRENT" != "$TRACK_BRANCH" ]]; then
+  git checkout $TRACK_BRANCH ||
+    die "Could not switch to $TRACK_BRANCH. Nothing has been changed yet."
+fi
+if [ -d "$gitdir/svn" ]; then
+  TYPE="git-svn"
+else
+  TYPE="git"
+fi
+if [ "$TYPE" = "git-svn" ]; then
+  git rebase $CURRENT ||
+    die "Could not rebase against $CURRENT. You may need to resolve conflicts."
+  git svn dcommit ||
+    die "Failed to commit to the upstream Subversion server. Check your network connection."
+else
+  if [[ -z "$TRACK" && "$CURRENT" != "$TRACK_BRANCH" ]]; then
+    git merge $CURRENT ||
+      die "Could not merge branch $CURRENT into $TRACK_BRANCH. You may need to resolve conflicts."
+  fi
+  if [[ "$CURRENT" == "$TRACK_BRANCH" ]]; then
+    MAPPING="$CURRENT"
+  else
+    MAPPING="$CURRENT:$TRACK_BRANCH"
+  fi
+  if [[ "$forceopt" == "-f" && "$MAPPING" == "master" ]]; then
+    die "Error: you tried to force-push to master! If you really want to do that, invoke git by hand."
+  fi
+  git push $forceopt $REMOTE "$MAPPING" ||
+    die "Could not push changes to $REMOTE/$TRACK_BRANCH. Check your network connection."
+fi
+if [[ -z "$TRACK" && "$CURRENT" != "$TRACK_BRANCH" ]]; then
+  git checkout $CURRENT ||
+    die "Could not switch back to $CURRENT from $TRACK_BRANCH."
+fi
+if [ "$TYPE" = "git-svn" ]; then
+  git svn rebase ||
+    die "Could not complete the rebase from the upstream Subversion server."
+fi
+good "Successfully shipped your changes from $CURRENT to $REMOTE"
