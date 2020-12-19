@@ -23,6 +23,7 @@ fi
 case $(uname -s) in
     Darwin)
         brew bundle -v --file=- <<-EOF
+			brew "awscli"
 			brew "direnv"
 			brew "fd"
 			brew "jq"
