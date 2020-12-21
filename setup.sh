@@ -1,4 +1,7 @@
 #!/bin/bash
+
+# Entrypoint to clone and checkout current files on machine.
+# curl https://gist.githubusercontent.com/dschofie/bf8bec81444f2c019fd72f12f9a1a2a5/raw/7d41cc9bfc2eeb8b8f53351323e5b9996b0a7ba3/setup-dotfiles | /bin/bash
 set -ex
 
 if [[ ! -d ~/.oh-my-zsh ]]; then
@@ -27,8 +30,9 @@ case $(uname -s) in
 			brew "direnv"
 			brew "fd"
 			brew "jq"
-			brew "tmux"
+			brew "mosh"
 			brew "ripgrep"
+			brew "tmux"
 EOF
 esac
 
