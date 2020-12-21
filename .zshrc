@@ -5,11 +5,6 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
-alias rg="rg -i " 
-
-# Dotfiles alias
-alias config='/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
-
 # Path to your oh-my-zsh installation.
 export ZSH=$HOME/.oh-my-zsh
 
@@ -19,12 +14,16 @@ export ZSH=$HOME/.oh-my-zsh
 # See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
 export ZSH_THEME="powerlevel10k/powerlevel10k"
 
-source ~/.secrets
+if [[ -f ~/.secrets ]];then 
+  source ~/.secrets
+else
+  echo "FYI secrets are not setup"
+fi
 
 export PATH="$HOME/dotfilebin:$PATH"
 
 # Hacker-man?
-export EDITOR=vim
+export EDITOR=nvim
 # ZSH_THEME="agnoster"
 # ZSH_THEME="robbyrussell"
 # Set list of themes to pick from when loading at random
@@ -85,12 +84,11 @@ export EDITOR=vim
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git vi-mode fasd zsh-autosuggestions)
+plugins=(vi-mode fasd zsh-autosuggestions)
 
 # Lots of colors
 # Trying to get italics with tmux + vim working
-# export TERM="xterm-256color"
-export TERM="gnome-256color"
+export TERM="xterm-256color"
 
 source $ZSH/oh-my-zsh.sh
 
@@ -116,35 +114,18 @@ setopt HIST_EXPIRE_DUPS_FIRST  # allow dups, but expire old ones when I hit HIST
 # plugins, and themes. Aliases can be placed here, though oh-my-zsh
 # users are encouraged to define aliases within the ZSH_CUSTOM folder.
 # For a full list of active aliases, run `alias`.
-#
-# Example aliases
-# alias zshconfig="mate ~/.zshrc"
-# alias ohmyzsh="mate ~/.oh-my-zsh"
-# PROMPT="%{$fg[cyan]%}$USER@%{$fg[blue]%}%m ${PROMPT}"
-#
-# alias rg="rg --ignore-file=/home/ubuntu/co/backend/go/src/samsaradev.io/vendor/github.com/trustelem/zxcvbn/frequency/lists.go"
-eval "$(direnv hook zsh)"
+alias vifi='vim $(fzf)'
+alias vim="nvim"
 
-# Taskrunner autocomplete
-autoload bashcompinit
-bashcompinit
-if [ -f $BACKEND_ROOT/bin/taskrunner-completion.bash ]; then
-  . $BACKEND_ROOT/bin/taskrunner-completion.bash
-fi
-
-# eval "$(hub alias -s)"
-
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+# Dotfiles alias
+alias config='/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
 
 alias trls='taskrunner `taskrunner --list | fzf --height 40%`'
 alias gpom='git pull origin master'
 
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
-leave() {
-  tmux detach-client -E 'exit'
-}
 
-export PATH="/home/linuxbrew/.linuxbrew/bin:$PATH"
 export PATH="$HOME/diff-so-fancy:$PATH"
 
 console() {
@@ -155,7 +136,6 @@ console() {
     fi
 }
 
-alias vifi='vim $(fzf)'
-
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+

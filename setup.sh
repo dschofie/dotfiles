@@ -23,6 +23,19 @@ if [[ ! -d ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions ]]; then
     git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
 fi
 
+# Use .vimrc for neovim https://neovim.io/doc/user/nvim.html#nvim-from-vim
+if [[ ! -d "$HOME/.config/nvim" ]]; then
+    mkdir -p "$HOME/.config/nvim"
+fi
+
+if [[ ! -f "$HOME/.config/nvim/init.vim" ]]; then
+    tee "$HOME/.config/nvim/init.vim" <<EOF
+set runtimepath^=~/.vim runtimepath+=~/.vim/after
+let &packpath = &runtimepath
+source ~/.vimrc
+EOF
+fi
+
 case $(uname -s) in
     Darwin)
         brew bundle -v --file=- <<-EOF
@@ -31,6 +44,7 @@ case $(uname -s) in
 			brew "fd"
 			brew "jq"
 			brew "mosh"
+			brew "neovim"
 			brew "ripgrep"
 			brew "tmux"
 EOF
