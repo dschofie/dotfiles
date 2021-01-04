@@ -34,12 +34,18 @@ colorscheme dracula
 
 " Start autocompleting immediately 
 "" "au filetype go inoremap <buffer> . .<C-x><C-o>
+" TODO: make a .rgignore file or something.
+let $FZF_DEFAULT_COMMAND='rg --files --no-ignore-vcs --hidden --glob="!{**/node_modules**,**/npm-packages-offline-cache/**,.git/*,bazel-**,go/pkg/**,go/bin/**,opt/**,go/.cache/**,**.bazelcache/**}"'
 map <C-n> :cnext<CR>
 map <C-m> :cprevious<CR>
 map <C-p> :FZF<CR>
 nnoremap <leader>a :cclose<CR>
 " Make go really colorful
 let g:go_highlight_types = 1
+" go imports on save
+let g:go_fmt_options = { 'goimports': '-local samsaradev.io' }
+let g:go_fmt_command = "goimports"
+
 " Ripped from:
 " https://github.com/fatih/vim-go/issues/2256#issuecomment-571986144
 let g:go_auto_sameids = 1
@@ -60,9 +66,6 @@ let g:go_highlight_string_spellcheck = 1
 let g:go_highlight_format_strings = 1
 let g:go_highlight_variable_declarations = 1
 let g:go_highlight_variable_assignments = 1
-let g:go_fmt_experimental = 1
-let g:go_metalinter_autosave=1
-let g:go_metalinter_autosave_enabled=['golint', 'govet']
 
 " Autocomplete everything to help
 "" set completeopt+=menuone
@@ -76,7 +79,3 @@ autocmd FileType go nmap <leader>b  <Plug>(go-build)
 autocmd FileType go nmap <leader>r  <Plug>(go-run)
 autocmd FileType go nmap <leader>t  <Plug>(go-test)
 
-" try
-" source ~/.vim_runtime/my_configs.vim
-" catch
-" endtry

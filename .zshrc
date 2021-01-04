@@ -125,17 +125,23 @@ alias gpom='git pull origin master'
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
+eval "$(direnv hook zsh)"
 
 export PATH="$HOME/diff-so-fancy:$PATH"
 
 console() {
+    set -x
     if [[ $IS_DEVBOX  ]]; then
         agent-curl --unix-socket $HOME/co/backend/.devboxagent.sock http://localhost/awsokta --request POST -d $1
     else
         $HOME/co/backend/bin/aws-okta login okta-$1
     fi
+    set +x
 }
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
+if [[ -f ~/.bash_functions ]]; then
+    source ~/.bash_functions
+fi

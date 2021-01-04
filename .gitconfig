@@ -40,6 +40,7 @@
 	bref = "!git for-each-ref --sort='-authordate' --format='%09%(refname)' refs/heads | sed -e 's-refs/heads/--'"
 	rbom = pull --rebase origin master
 	rbiom = rebase -i origin/master 
+	rbim = rebase -i master 
 	pom = pull origin master
 	resethead = reset --soft HEAD^
 	resethead = reset --soft HEAD^

@@ -1,8 +1,0 @@
-func() {
-    local branches branch
-    branches=$(git branch --merged) &&
-    branch=$(echo "$branches" | fzf +m) &&
-    git branch -d $(echo "$branch" | sed "s/.* //") && fbrd
-}
-
-func

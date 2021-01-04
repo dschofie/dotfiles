@@ -36,10 +36,16 @@ source ~/.vimrc
 EOF
 fi
 
+if [[ ! -d "$HOME/.vim/bundle/vim-easymotion" ]]; then
+    mkdir -p "~/.vim/bundle"
+    git clone https://github.com/easymotion/vim-easymotion ~/.vim/bundle/vim-easymotion
+fi
+
 case $(uname -s) in
     Darwin)
         brew bundle -v --file=- <<-EOF
 			brew "awscli"
+			brew "bat"
 			brew "direnv"
 			brew "fd"
 			brew "jq"
@@ -48,6 +54,17 @@ case $(uname -s) in
 			brew "ripgrep"
 			brew "tmux"
 EOF
+    ;;
+    Linux)
+        sudo apt-get install -y \
+            awscli \
+            bat \
+            direnv \
+            jq \
+            mosh \
+            neovim \
+            ripgrep \
+            tmux 
 esac
 
 
