@@ -58,7 +58,6 @@ EOF
     Linux)
         sudo apt-get install -y \
             awscli \
-            bat \
             direnv \
             jq \
             mosh \

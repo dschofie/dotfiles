@@ -46,6 +46,8 @@
 	resethead = reset --soft HEAD^
 	resetcom = "!f(){ git reset --soft HEAD^ && git add -A && git commit --reuse-message=HEAD@{1};};f"
 
+	prdiff = "!f(){ git log -p --reverse $(git merge-base origin/master HEAD)...HEAD;};f"
+
 	# list aliases
 	la = "!git config -l | grep alias | cut -c 7-"
 
