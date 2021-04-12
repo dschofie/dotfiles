@@ -8,11 +8,13 @@ if empty(glob('~/.vim/autoload/plug.vim'))
 endif
 
 call plug#begin('~/.vim/plugged')
-Plug 'dracula/vim', { 'as': 'dracula'  }
+Plug 'morhetz/gruvbox'
+" Plug 'dracula/vim', { 'as': 'dracula'  }
 Plug 'junegunn/fzf.vim'
 Plug 'junegunn/fzf', { 'do': { -> fzf#install()  }  }
 Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries'  }
 Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-rhubarb'
 call plug#end()
 
 " source ~/.vim_runtime/vimrcs/basic.vim
@@ -22,15 +24,22 @@ call plug#end()
 
 " Theme
 syntax enable
-colorscheme dracula
+colorscheme gruvbox
 
 :set number
 " Want :GoBuild to auto-write
 :set autowrite
 " Tabs or spaces?
-:set tabstop=4
 :set shiftwidth=4
-:set expandtab
+:set tabstop=4
+:set autoindent
+:set smartindent
+:set smarttab
+
+:command WQ wq
+:command Wq wq
+:command W w
+:command Q q
 
 " Start autocompleting immediately 
 "" "au filetype go inoremap <buffer> . .<C-x><C-o>
@@ -66,6 +75,8 @@ let g:go_highlight_string_spellcheck = 1
 let g:go_highlight_format_strings = 1
 let g:go_highlight_variable_declarations = 1
 let g:go_highlight_variable_assignments = 1
+" Show gopls status.
+let g:go_echo_command_info = 1
 
 " Autocomplete everything to help
 "" set completeopt+=menuone
@@ -79,3 +90,9 @@ autocmd FileType go nmap <leader>b  <Plug>(go-build)
 autocmd FileType go nmap <leader>r  <Plug>(go-run)
 autocmd FileType go nmap <leader>t  <Plug>(go-test)
 
+
+" Easier copy/paste.
+cmap cpl .w !pbcopy
+
+" Apply macro via , with / 
+nnoremap , @q

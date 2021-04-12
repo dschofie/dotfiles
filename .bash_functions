@@ -1,3 +1,12 @@
+# Open aws console.
+console() {
+    if [[ $IS_DEVBOX  ]]; then
+        agent-curl --unix-socket $HOME/co/backend/.devboxagent.sock http://localhost/awsokta --request POST -d $1
+    else
+        $HOME/co/backend/bin/aws-okta login okta-$1
+    fi
+}
+
 # FZF stuff taken from https://github.com/junegunn/fzf/wiki/examples
 # fbr - checkout git branch (including remote branches), sorted by most recent commit, limit 30 last branches
 fbr() {
@@ -39,4 +48,50 @@ tm() {
     fi
     session=$(tmux list-sessions -F "#{session_name}" 2>/dev/null | fzf --exit-0) &&  tmux $change -t "$session" || echo "No sessions found."
 }
+
+last_log() {
+    less $(bazel info output_base)
+}
+
+last_dir() {
+    bazel info output_base
+}
+
+# Bazel test helper. Should auto-complete.
+bt() {
+}
+
+dirls() {
+    dirname % | xargs ls
+}
+
+bazeldirmarker() {
+    if [[ -z "$1" ]]; then
+	echo "set a path pls"
+    fi
+
+    mkdir -p $1/bazeldirmarker
+    touch $1/bazeldirmarker/marker
+    echo "exports_files([\"marker\"])" > $1/bazeldirmarker/BUILD.bazel
+	git add -f $1/bazeldirmarker/BUILD.bazel
+}
+
+currentb() {
+    git rev-parse --abbrev-ref HEAD | tee >(pbcopy)
+}
+
+newdata() {
+    if [[ -z "$1" || -z "$2" ]]; then
+		echo "set a path pls"
+    fi
+
+    tagetPath=$2
+    if [[ "$targetPath" == "/home/ubuntu" ]]; then
+		targetPath=$(echo "$targetPath"cut -d'{{/}}' -f{{4:}})
+		targetPath="//$targetPath"
+    fi
+	
+    echo "set add $1|$targetPath" >> buildozercmds
+}
+
 
