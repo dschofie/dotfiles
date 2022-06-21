@@ -29,12 +29,16 @@ colorscheme gruvbox
 :set number
 " Want :GoBuild to auto-write
 :set autowrite
+:set autoread
 " Tabs or spaces?
 :set shiftwidth=4
 :set tabstop=4
 :set autoindent
 :set smartindent
 :set smarttab
+
+" spell check pls"
+:set spell spelllang=en_us
 
 :command WQ wq
 :command Wq wq
