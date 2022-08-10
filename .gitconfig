@@ -3,8 +3,8 @@
 [merge "ours"]
 	driver = true
 [user]
-	email = "dannyschofield28@gmail.com"
-	name = "Danny Schofield"
+	email = dannyschofield28@gmail.com
+	name = Danny Schofield 
 
 [alias]
 	# one-line log
@@ -38,8 +38,8 @@
 	br = branch
 	b = "!git for-each-ref --sort='-authordate' --format='%(authordate)%09%(objectname:short)%09%(refname)' refs/heads | sed -e 's-refs/heads/--'"
 	bref = "!git for-each-ref --sort='-authordate' --format='%09%(refname)' refs/heads | sed -e 's-refs/heads/--'"
-	rbom = pull --rebase origin master
-	rbiom = rebase -i origin/master 
+	rbom = "!f(){ git pull --rebase origin $(git branch -l master main | xargs);};f" 
+	rbiom = "!f(){ git rebase -i origin/$(git branch -l master main | xargs);};f" 
 	rbim = rebase -i master 
 	pom = pull origin master
 	resethead = reset --soft HEAD^
@@ -94,3 +94,14 @@
 	oldHighlight = red bold 52
 	newNormal = green bold
 	newHighlight = green bold 22
+[init]
+	defaultbranch = main
+[push]
+	default = current
+[pull]
+	rebase = false
+	ff = only
+[rerere]
+	enabled = true
+[rebase]
+	autoStash = true

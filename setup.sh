@@ -53,6 +53,8 @@ case $(uname -s) in
 			brew "neovim"
 			brew "ripgrep"
 			brew "tmux"
+			brew "fasd"
+			brew "tldr"
 EOF
     ;;
     Linux)
@@ -63,7 +65,9 @@ EOF
             mosh \
             neovim \
             ripgrep \
-            tmux 
+            tmux \
+            fasd \
+			tldr
 esac
 
 
