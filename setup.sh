@@ -13,6 +13,10 @@ if [[ ! -d ~/diff-so-fancy ]]; then
 	git clone git@github.com:so-fancy/diff-so-fancy.git ~/diff-so-fancy
 fi
 
+if [[ ! -d ~/powerlevel10k ]]; then
+	git clone git@github.com:romkatv/powerlevel10k.git ~/powerlevel10k
+fi
+
 if [[ ! -d ~/.fzf ]]; then
 	git clone https://github.com/junegunn/fzf.git ~/.fzf
 	# Installs nice fuzzy finder completions.

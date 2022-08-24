@@ -7,6 +7,16 @@ console() {
     fi
 }
 
+lastcommit() {
+	git log --format=%B -n 1 | tee >(pbcopy)
+}
+
+branchcommits() {
+	local baseBranch
+	baseBranch=$(git branch -l master main | xargs)
+	git log --format=%B HEAD...$(git merge-base $baseBranch HEAD) | tee >(pbcopy)
+}
+
 # FZF stuff taken from https://github.com/junegunn/fzf/wiki/examples
 # fbr - checkout git branch (including remote branches), sorted by most recent commit, limit 30 last branches
 fbr() {
@@ -94,4 +104,5 @@ newdata() {
     echo "set add $1|$targetPath" >> buildozercmds
 }
 
+code () { VSCODE_CWD="$PWD" open -n -b "com.microsoft.VSCode" --args $* ;}
 
