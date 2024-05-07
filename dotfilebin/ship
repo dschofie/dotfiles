@@ -105,6 +105,9 @@ else
   if [[ "$forceopt" == "-f" && "$MAPPING" == "master" ]]; then
     die "Error: you tried to force-push to master! If you really want to do that, invoke git by hand."
   fi
+  if [[ "$forceopt" == "-f" && "$MAPPING" == "main" ]]; then
+    die "Error: you tried to force-push to main! If you really want to do that, invoke git by hand."
+  fi
   git push $forceopt $REMOTE "$MAPPING" ||
     die "Could not push changes to $REMOTE/$TRACK_BRANCH. Check your network connection."
 fi
