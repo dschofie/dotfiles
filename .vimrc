@@ -15,6 +15,11 @@ Plug 'junegunn/fzf', { 'do': { -> fzf#install()  }  }
 Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries'  }
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-rhubarb'
+Plug 'hashivim/vim-terraform'
+" Neovim
+Plug 'nvim-lua/plenary.nvim'
+Plug 'nvim-telescope/telescope.nvim'
+Plug 'nvim-telescope/telescope-file-browser.nvim'
 call plug#end()
 
 " source ~/.vim_runtime/vimrcs/basic.vim
